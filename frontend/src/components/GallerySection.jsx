@@ -74,8 +74,8 @@ const GallerySection = () => {
               </div>
               
               {/* Overlay */}
-              <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                <div className="absolute bottom-0 left-0 right-0 p-6">
+              <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
+                <div className="absolute bottom-0 left-0 right-0 p-6 pointer-events-auto">
                   <Badge className="mb-2 bg-cyan-600 text-white">{item.category}</Badge>
                   <h3 className="text-xl font-bold text-white mb-1">{item.title}</h3>
                   <p className="text-slate-300 text-sm">{item.description}</p>
