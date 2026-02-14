@@ -3,21 +3,18 @@ from typing import Optional
 import os
 from pathlib import Path
 from models.contact import ContactSubmission, ContactResponse
-from motor.motor_asyncio import AsyncIOMotorClient
 import logging
 
 router = APIRouter()
-
-# MongoDB connection
-mongo_url = os.environ['MONGO_URL']
-client = AsyncIOMotorClient(mongo_url)
-db = client[os.environ['DB_NAME']]
 
 logger = logging.getLogger(__name__)
 
 # Create uploads directory if it doesn't exist
 UPLOAD_DIR = Path("/app/backend/uploads")
 UPLOAD_DIR.mkdir(exist_ok=True)
+
+# Database will be injected from server.py
+from server import db
 
 @router.post("/contact", response_model=ContactResponse)
 async def create_contact_submission(
@@ -70,7 +67,7 @@ async def create_contact_submission(
         )
         
         # Save to database
-        result = await db.contact_submissions.insert_one(contact.dict())
+        result = await db.contact_submissions.insert_one(contact.model_dump())
         logger.info(f"Contact submission created: {contact.id}")
         
         return ContactResponse(
@@ -95,7 +92,7 @@ async def get_contact_submissions():
     Get all contact submissions
     """
     try:
-        submissions = await db.contact_submissions.find().sort("created_at", -1).to_list(100)
+        submissions = await db.contact_submissions.find({}, {"_id": 0}).sort("created_at", -1).to_list(100)
         return [ContactResponse(**submission) for submission in submissions]
     except Exception as e:
         logger.error(f"Error fetching contact submissions: {str(e)}")
@@ -107,7 +104,7 @@ async def get_contact_submission(submission_id: str):
     Get a specific contact submission by ID
     """
     try:
-        submission = await db.contact_submissions.find_one({"id": submission_id})
+        submission = await db.contact_submissions.find_one({"id": submission_id}, {"_id": 0})
         if not submission:
             raise HTTPException(status_code=404, detail="Submission not found")
         return ContactResponse(**submission)
