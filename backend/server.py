@@ -10,9 +10,6 @@ from typing import List
 import uuid
 from datetime import datetime, timezone
 
-# Import routes
-from routes.contact import router as contact_router
-
 
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
@@ -69,7 +66,9 @@ async def get_status_checks():
     
     return status_checks
 
-# Include contact routes
+# Import and include contact routes after db is initialized
+from routes.contact import create_router as create_contact_router
+contact_router = create_contact_router(db)
 api_router.include_router(contact_router, tags=["contact"])
 
 # Include the router in the main app
