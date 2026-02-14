@@ -43,8 +43,10 @@ def create_router(db):
                         detail=f"File type {file_ext} not allowed. Allowed types: {', '.join(allowed_extensions)}"
                     )
                 
-                # Generate unique filename
-                file_name = f"{ContactSubmission().id}_{file.filename}"
+                # Generate unique filename using uuid directly
+                import uuid
+                unique_id = str(uuid.uuid4())
+                file_name = f"{unique_id}_{file.filename}"
                 file_path = str(UPLOAD_DIR / file_name)
                 
                 # Save file
