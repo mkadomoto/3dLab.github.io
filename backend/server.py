@@ -66,10 +66,21 @@ async def get_status_checks():
     
     return status_checks
 
-# Import and include contact routes after db is initialized
+# Import and include routes after db is initialized
 from routes.contact import create_router as create_contact_router
+from routes.auth import create_router as create_auth_router
+from routes.products import create_router as create_products_router
+from routes.categories import create_router as create_categories_router
+
 contact_router = create_contact_router(db)
+auth_router = create_auth_router(db)
+products_router = create_products_router(db)
+categories_router = create_categories_router(db)
+
 api_router.include_router(contact_router, tags=["contact"])
+api_router.include_router(auth_router, tags=["auth"])
+api_router.include_router(products_router, tags=["products"])
+api_router.include_router(categories_router, tags=["categories"])
 
 # Include the router in the main app
 app.include_router(api_router)
