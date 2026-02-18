@@ -1,8 +1,7 @@
 import React from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/card';
 import { Badge } from './ui/badge';
-import { Button } from './ui/button';
-import { Building2, Palette, Briefcase, ArrowRight } from 'lucide-react';
+import { Building2, Palette, Briefcase } from 'lucide-react';
 
 const ServicesSection = () => {
   const services = [
@@ -68,7 +67,7 @@ const ServicesSection = () => {
               </CardHeader>
               
               <CardContent>
-                <ul className="space-y-3 mb-6">
+                <ul className="space-y-3">
                   {service.features.map((feature, idx) => (
                     <li key={idx} className="flex items-center gap-2 text-slate-600">
                       <div className="w-1.5 h-1.5 rounded-full bg-cyan-600"></div>
@@ -76,10 +75,6 @@ const ServicesSection = () => {
                     </li>
                   ))}
                 </ul>
-                <Button className="w-full bg-slate-900 hover:bg-cyan-600 text-white group">
-                  Más Información
-                  <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
-                </Button>
               </CardContent>
             </Card>
           ))}
@@ -94,9 +89,12 @@ const ServicesSection = () => {
                 Trabajamos con diseños personalizados. Envíanos tu archivo 3D y te daremos una cotización en 24 horas.
               </p>
             </div>
-            <Button size="lg" className="bg-cyan-600 hover:bg-cyan-700 text-white whitespace-nowrap px-8">
-              <a href="#contacto">Solicitar Proyecto Personalizado</a>
-            </Button>
+            <a 
+              href="#contacto"
+              className="bg-cyan-600 hover:bg-cyan-700 text-white px-8 py-3 rounded-lg font-medium whitespace-nowrap transition-colors"
+            >
+              Solicitar Proyecto Personalizado
+            </a>
           </div>
         </div>
       </div>
