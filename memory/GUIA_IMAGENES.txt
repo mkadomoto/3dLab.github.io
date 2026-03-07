@@ -1,0 +1,31 @@
+=============================================
+GUÍA PARA SUBIR IMÁGENES CON IMGUR
+=============================================
+
+PASO A PASO:
+
+1. Ve a https://imgur.com
+
+2. Clic en "New post" o arrastra tu imagen directamente
+
+3. Una vez subida, CLICK DERECHO sobre la imagen
+
+4. Selecciona "Copiar dirección de imagen" o "Copy image address"
+
+5. La URL copiada se verá así:
+   https://i.imgur.com/XXXXXXX.png
+   o
+   https://i.imgur.com/XXXXXXX.jpg
+
+6. Pega esa URL en el campo "URL Imagen" del admin
+
+IMPORTANTE:
+- La URL debe terminar en .png, .jpg, .jpeg o .webp
+- Si no termina así, busca el botón de "Direct Link" en Imgur
+- No uses el link de la página de Imgur, usa el link directo de la imagen
+
+EJEMPLO:
+✅ CORRECTO: https://i.imgur.com/abc123.png
+❌ INCORRECTO: https://imgur.com/abc123
+
+=============================================
