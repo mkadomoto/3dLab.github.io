@@ -136,26 +136,33 @@ const StorePage = () => {
           ) : (
             <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
               {products.map(product => (
-                <Card key={product.id} className="hover:shadow-xl transition-shadow">
-                  <div className="aspect-square overflow-hidden">
+                <Card key={product.id} className="hover:shadow-xl transition-shadow flex flex-col">
+                  <div className="aspect-square overflow-hidden bg-slate-100">
                     <img
                       src={product.image_url}
                       alt={product.name}
                       className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+                      loading="lazy"
                     />
                   </div>
-                  <CardHeader>
-                    <div className="flex flex-wrap gap-2 mb-2">
-                      {product.categories?.slice(0, 2).map(cat => (
-                        <Badge key={cat.id} variant="secondary" className="text-xs">
-                          {cat.name}
-                        </Badge>
-                      ))}
+                  <CardHeader className="flex-grow">
+                    <div className="h-14 mb-2">
+                      {product.categories && product.categories.length > 0 ? (
+                        <div className="flex flex-wrap gap-2">
+                          {product.categories.slice(0, 2).map(cat => (
+                            <Badge key={cat.id} variant="secondary" className="text-xs">
+                              {cat.name}
+                            </Badge>
+                          ))}
+                        </div>
+                      ) : (
+                        <div className="h-6"></div>
+                      )}
                     </div>
-                    <CardTitle className="text-lg">{product.name}</CardTitle>
-                    <CardDescription className="line-clamp-2">{product.description}</CardDescription>
+                    <CardTitle className="text-lg line-clamp-2">{product.name}</CardTitle>
+                    <CardDescription className="line-clamp-2 min-h-[40px]">{product.description}</CardDescription>
                   </CardHeader>
-                  <CardContent>
+                  <CardContent className="pt-0">
                     <div className="flex items-center justify-between mb-4">
                       <span className="text-2xl font-bold text-cyan-600">${product.price}</span>
                     </div>
