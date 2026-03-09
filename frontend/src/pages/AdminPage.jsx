@@ -65,15 +65,16 @@ const AdminPage = () => {
     e.preventDefault();
     try {
       const data = { ...productForm, price: parseFloat(productForm.price) };
+      const headers = { 
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      };
+      
       if (editingProduct) {
-        await axios.put(`${API}/products/${editingProduct.id}`, data, {
-          headers: { Authorization: `Bearer ${token}` }
-        });
+        await axios.put(`${API}/products/${editingProduct.id}`, data, { headers });
         toast.success('Producto actualizado');
       } else {
-        await axios.post(`${API}/products`, data, {
-          headers: { Authorization: `Bearer ${token}` }
-        });
+        await axios.post(`${API}/products`, data, { headers });
         toast.success('Producto creado');
       }
       setShowProductDialog(false);
@@ -81,7 +82,8 @@ const AdminPage = () => {
       setProductForm({ name: '', description: '', price: '', image_url: '', category_ids: [] });
       fetchProducts();
     } catch (error) {
-      toast.error('Error guardando producto');
+      console.error('Error saving product:', error);
+      toast.error(error.response?.data?.detail || 'Error guardando producto');
     }
   };
 
@@ -102,15 +104,16 @@ const AdminPage = () => {
   const handleSaveCategory = async (e) => {
     e.preventDefault();
     try {
+      const headers = { 
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      };
+      
       if (editingCategory) {
-        await axios.put(`${API}/categories/${editingCategory.id}`, categoryForm, {
-          headers: { Authorization: `Bearer ${token}` }
-        });
+        await axios.put(`${API}/categories/${editingCategory.id}`, categoryForm, { headers });
         toast.success('Categoría actualizada');
       } else {
-        await axios.post(`${API}/categories`, categoryForm, {
-          headers: { Authorization: `Bearer ${token}` }
-        });
+        await axios.post(`${API}/categories`, categoryForm, { headers });
         toast.success('Categoría creada');
       }
       setShowCategoryDialog(false);
@@ -118,6 +121,7 @@ const AdminPage = () => {
       setCategoryForm({ name: '', description: '' });
       fetchCategories();
     } catch (error) {
+      console.error('Error saving category:', error);
       toast.error(error.response?.data?.detail || 'Error guardando categoría');
     }
   };

@@ -4,21 +4,41 @@ from typing import List, Optional
 from models.product import Product, ProductCreate, ProductUpdate, ProductResponse
 from datetime import datetime
 import logging
+from jose import JWTError, jwt
+import os
 
 logger = logging.getLogger(__name__)
 security = HTTPBearer()
 
+SECRET_KEY = os.environ.get("SECRET_KEY", "your-secret-key-change-in-production")
+ALGORITHM = "HS256"
+
+async def verify_token_async(token: str, db):
+    """Verify JWT token and return user"""
+    try:
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        username: str = payload.get("sub")
+        if username is None:
+            return None
+        
+        user = await db.users.find_one({"username": username}, {"_id": 0})
+        return user
+    except JWTError:
+        return None
+    except Exception as e:
+        logger.error(f"Error verifying token: {str(e)}")
+        return None
+
 def create_router(db):
     router = APIRouter()
 
-    def get_current_user(credentials: HTTPAuthorizationCredentials = Depends(security)):
+    async def get_current_user(credentials: HTTPAuthorizationCredentials = Depends(security)):
         """Verify JWT token and return user"""
-        from routes.auth import verify_token
         token = credentials.credentials
-        user = verify_token(token, db)
-        if not user:
+        user_dict = await verify_token_async(token, db)
+        if not user_dict:
             raise HTTPException(status_code=401, detail="Invalid authentication credentials")
-        return user
+        return user_dict
 
     async def verify_admin(user: dict = Depends(get_current_user)):
         """Verify user is admin"""

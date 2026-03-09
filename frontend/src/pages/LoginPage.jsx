@@ -36,10 +36,10 @@ const LoginPage = () => {
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">
           <div className="flex items-center justify-center gap-2 mb-4">
-            <Printer className="w-8 h-8 text-cyan-600" />
-            <span className="text-2xl font-bold">3D<span className="text-cyan-600">Print</span>Pro</span>
+            <img src="/logo-round.png" alt="B&K 3D" className="w-12 h-12 rounded-full" />
+            <span className="text-2xl font-bold">B&K <span className="text-cyan-600">3D</span></span>
           </div>
-          <CardTitle className="text-2xl">Admin Login</CardTitle>
+          <CardTitle className="text-2xl">Admin Panel</CardTitle>
           <CardDescription>Ingresa tus credenciales para acceder</CardDescription>
         </CardHeader>
         <CardContent>

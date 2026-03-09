@@ -11,14 +11,13 @@ security = HTTPBearer()
 def create_router(db):
     router = APIRouter()
 
-    def get_current_user(credentials: HTTPAuthorizationCredentials = Depends(security)):
+    async def get_current_user(credentials: HTTPAuthorizationCredentials = Depends(security)):
         """Verify JWT token and return user"""
-        from routes.auth import verify_token
         token = credentials.credentials
-        user = verify_token(token, db)
-        if not user:
+        user_dict = await verify_token_async(token, db)
+        if not user_dict:
             raise HTTPException(status_code=401, detail="Invalid authentication credentials")
-        return user
+        return user_dict
 
     async def verify_admin(user: dict = Depends(get_current_user)):
         """Verify user is admin"""
