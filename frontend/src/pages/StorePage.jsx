@@ -53,7 +53,8 @@ const StorePage = () => {
 
   const handleContactForProduct = (product) => {
     const message = `Hola, estoy interesado en el producto: ${product.name} ($${product.price})`;
-    navigate(`/?product=${product.id}&message=${encodeURIComponent(message)}#contacto`);
+    // Usar window.location para que el hash #contacto funcione correctamente
+    window.location.href = `/?product=${product.id}&message=${encodeURIComponent(message)}#contacto`;
   };
 
   // Group categories by type
