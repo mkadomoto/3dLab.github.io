@@ -1,3 +1,6 @@
+import os
+
+os.makedirs("uploads", exist_ok=True)
 from fastapi import FastAPI, APIRouter
 from dotenv import load_dotenv
 from starlette.middleware.cors import CORSMiddleware
