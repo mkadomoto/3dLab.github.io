@@ -10,7 +10,7 @@ import { collection, onSnapshot, query, orderBy } from 'https://www.gstatic.com/
 
 const StorePage = () => {
 
-  const db = window.db;
+ import { db } from "../firebase";
 
   const [products, setProducts] = useState([]);
   const [allProducts, setAllProducts] = useState([]);
