@@ -6,11 +6,18 @@ import { Input } from '../components/ui/input';
 import { Badge } from '../components/ui/badge';
 import { Button } from '../components/ui/button';
 import { Search, ShoppingBag } from 'lucide-react';
-import { collection, onSnapshot, query, orderBy } from 'https://www.gstatic.com/firebasejs/10.16.0/firebase-firestore.js';
+
+import { db } from "../firebase";
+
+import { 
+  collection, 
+  onSnapshot, 
+  query, 
+  orderBy 
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
 
 const StorePage = () => {
-
- import { db } from "../firebase";
 
   const [products, setProducts] = useState([]);
   const [allProducts, setAllProducts] = useState([]);
@@ -19,12 +26,14 @@ const StorePage = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [loading, setLoading] = useState(true);
 
-  // ESCUCHAR PRODUCTOS EN TIEMPO REAL
+
+  // PRODUCTOS EN TIEMPO REAL
   useEffect(() => {
 
     const q = query(collection(db, "products"), orderBy("createdAt", "desc"));
 
     const unsubscribe = onSnapshot(q, (snapshot) => {
+
       const lista = snapshot.docs.map(doc => ({
         id: doc.id,
         ...doc.data()
@@ -33,29 +42,34 @@ const StorePage = () => {
       setAllProducts(lista);
       setProducts(lista);
       setLoading(false);
+
     });
 
     return () => unsubscribe();
 
   }, []);
 
-  // ESCUCHAR CATEGORÍAS EN TIEMPO REAL
+
+  // CATEGORÍAS EN TIEMPO REAL
   useEffect(() => {
 
     const q = query(collection(db, "categories"), orderBy("name"));
 
     const unsubscribe = onSnapshot(q, (snapshot) => {
+
       const lista = snapshot.docs.map(doc => ({
         id: doc.id,
         ...doc.data()
       }));
 
       setCategories(lista);
+
     });
 
     return () => unsubscribe();
 
   }, []);
+
 
   // FILTROS
   useEffect(() => {
@@ -63,18 +77,22 @@ const StorePage = () => {
     let filtered = [...allProducts];
 
     if (selectedCategory) {
+
       filtered = filtered.filter(p =>
         p.category_ids?.includes(selectedCategory)
       );
+
     }
 
     if (searchTerm) {
+
       const term = searchTerm.toLowerCase();
 
       filtered = filtered.filter(p =>
         p.name.toLowerCase().includes(term) ||
         p.description.toLowerCase().includes(term)
       );
+
     }
 
     setProducts(filtered);
@@ -83,12 +101,17 @@ const StorePage = () => {
 
 
   const handleContactForProduct = (product) => {
+
     const message = `Hola, estoy interesado en el producto: ${product.name} ($${product.price})`;
-    window.location.href = `/?product=${product.id}&message=${encodeURIComponent(message)}#contacto`;
+
+    window.location.href =
+      `/?product=${product.id}&message=${encodeURIComponent(message)}#contacto`;
+
   };
 
 
   return (
+
     <div className="min-h-screen bg-slate-50">
 
       <Header />
@@ -102,6 +125,7 @@ const StorePage = () => {
 
             <div className="flex items-center justify-center gap-2 mb-4">
               <ShoppingBag className="w-8 h-8 text-cyan-600" />
+
               <h1 className="text-4xl md:text-5xl font-bold text-slate-900">
                 Tienda 3D
               </h1>
@@ -166,6 +190,7 @@ const StorePage = () => {
 
 
           {/* PRODUCTOS */}
+
           {loading ? (
 
             <div className="text-center py-12">
@@ -181,9 +206,11 @@ const StorePage = () => {
           ) : products.length === 0 ? (
 
             <div className="text-center py-12">
+
               <p className="text-slate-600 text-lg">
                 No se encontraron productos
               </p>
+
             </div>
 
           ) : (
@@ -276,6 +303,7 @@ const StorePage = () => {
 
     </div>
   );
+
 };
 
 export default StorePage;
