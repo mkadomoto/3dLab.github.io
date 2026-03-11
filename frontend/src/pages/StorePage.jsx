@@ -1,6 +1,6 @@
+// StorePage.jsx
 import React, { useState, useEffect } from 'react';
-import { Link, useNavigate, useSearchParams } from 'react-router-dom';
-import axios from 'axios';
+import { Link } from 'react-router-dom';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../components/ui/card';
@@ -8,72 +8,78 @@ import { Input } from '../components/ui/input';
 import { Badge } from '../components/ui/badge';
 import { Button } from '../components/ui/button';
 import { Search, ShoppingBag } from 'lucide-react';
-
-const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
-const API = `${BACKEND_URL}/api`;
+import { collection, getDocs, query, orderBy } from 'https://www.gstatic.com/firebasejs/10.16.0/firebase-firestore.js';
 
 const StorePage = () => {
+  const db = window.db;
+
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [loading, setLoading] = useState(true);
-  const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
 
   useEffect(() => {
     fetchCategories();
     fetchProducts();
+  }, []);
+
+  useEffect(() => {
+    filterProducts();
   }, [selectedCategory, searchTerm]);
 
+  // Firestore fetch
   const fetchCategories = async () => {
     try {
-      const response = await axios.get(`${API}/categories`);
-      setCategories(response.data);
+      const q = query(collection(db, 'categories'), orderBy('name'));
+      const snapshot = await getDocs(q);
+      const lista = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      setCategories(lista);
     } catch (error) {
-      console.error('Error fetching categories:', error);
+      console.error(error);
     }
   };
 
   const fetchProducts = async () => {
     try {
       setLoading(true);
-      const params = {};
-      if (searchTerm) params.search = searchTerm;
-      if (selectedCategory) params.category_id = selectedCategory;
-      
-      const response = await axios.get(`${API}/products`, { params });
-      setProducts(response.data);
+      const q = query(collection(db, 'products'), orderBy('createdAt', 'desc'));
+      const snapshot = await getDocs(q);
+      const lista = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      setProducts(lista);
     } catch (error) {
-      console.error('Error fetching products:', error);
+      console.error(error);
     } finally {
       setLoading(false);
     }
   };
 
-  const handleContactForProduct = (product) => {
-    const message = `Hola, estoy interesado en el producto: ${product.name} ($${product.price})`;
-    // Usar window.location para que el hash #contacto funcione correctamente
-    window.location.href = `/?product=${product.id}&message=${encodeURIComponent(message)}#contacto`;
+  // Filtrar productos por categoría o búsqueda
+  const filterProducts = () => {
+    setLoading(true);
+    setTimeout(() => {
+      let filtered = [...products];
+      if (selectedCategory) {
+        filtered = filtered.filter(p => p.category_ids?.includes(selectedCategory));
+      }
+      if (searchTerm) {
+        const term = searchTerm.toLowerCase();
+        filtered = filtered.filter(p => p.name.toLowerCase().includes(term) || p.description.toLowerCase().includes(term));
+      }
+      setProducts(filtered);
+      setLoading(false);
+    }, 100); // breve delay para animaciones
   };
 
-  // Group categories by type
-  const utilCategories = categories.filter(cat => 
-    cat.name.toLowerCase().includes('útil') || 
-    cat.name.toLowerCase().includes('soporte') ||
-    cat.name.toLowerCase().includes('práctico')
-  );
-  
-  const aestheticCategories = categories.filter(cat => 
-    cat.name.toLowerCase().includes('estét') || 
-    cat.name.toLowerCase().includes('figura') ||
-    cat.name.toLowerCase().includes('decorat')
-  );
+  const handleContactForProduct = (product) => {
+    const message = `Hola, estoy interesado en el producto: ${product.name} ($${product.price})`;
+    window.location.href = `/?product=${product.id}&message=${encodeURIComponent(message)}#contacto`;
+  };
 
   return (
     <div className="min-h-screen bg-slate-50">
       <Header />
-      
+
       <main className="pt-24 pb-12">
         <div className="container mx-auto px-4">
           {/* Hero Section */}
@@ -148,17 +154,14 @@ const StorePage = () => {
                   </div>
                   <CardHeader className="flex-grow">
                     <div className="h-14 mb-2">
-                      {product.categories && product.categories.length > 0 ? (
+                      {product.category_ids?.length > 0 ? (
                         <div className="flex flex-wrap gap-2">
-                          {product.categories.slice(0, 2).map(cat => (
-                            <Badge key={cat.id} variant="secondary" className="text-xs">
-                              {cat.name}
-                            </Badge>
-                          ))}
+                          {product.category_ids.map((catId, idx) => {
+                            const cat = categories.find(c => c.id === catId);
+                            return cat ? <Badge key={idx} variant="secondary" className="text-xs">{cat.name}</Badge> : null;
+                          })}
                         </div>
-                      ) : (
-                        <div className="h-6"></div>
-                      )}
+                      ) : <div className="h-6"></div>}
                     </div>
                     <CardTitle className="text-lg line-clamp-2">{product.name}</CardTitle>
                     <CardDescription className="line-clamp-2 min-h-[40px]">{product.description}</CardDescription>
