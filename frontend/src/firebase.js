@@ -2,12 +2,12 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/fireba
 import { getFirestore } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 const firebaseConfig = {
-  apiKey: "TU_API_KEY",
-  authDomain: "TU_AUTH_DOMAIN",
-  projectId: "TU_PROJECT_ID",
-  storageBucket: "TU_STORAGE_BUCKET",
-  messagingSenderId: "TU_ID",
-  appId: "TU_APP_ID"
+  apiKey: "AIzaSyBLCGxMnraxFHb33OYl3EQXkWiCes_9FFU",
+  authDomain: "byk3dimpresiones-746d4.firebaseapp.com",
+  projectId: "byk3dimpresiones-746d4",
+  storageBucket: "byk3dimpresiones-746d4.firebasestorage.app",
+  messagingSenderId: "948064780109",
+  appId: "1:948064780109:web:b66dcba2371c9b17180104"
 };
 
 const app = initializeApp(firebaseConfig);
