@@ -35,7 +35,7 @@ const HeroSection = () => {
           </h1>
           
           <p className="text-xl text-slate-300 mb-8 leading-relaxed max-w-2xl">
-            Servicios especializados de impresión 3D para arquitectos, diseñadores de interiores y empresas. 
+            Servicios especializados de impresión 3D para arquitectos, diseñadores de interiores, empresas y estudiantes. 
             Calidad profesional, entregas rápidas y soporte técnico experto.
           </p>
 
