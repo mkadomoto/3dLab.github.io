@@ -33,16 +33,7 @@ const Footer = () => {
             </div>
           </div>
 
-          {/* Services */}
-          <div>
-            <h3 className="text-white font-bold text-lg mb-4">Servicios</h3>
-            <ul className="space-y-2">
-              <li><a href="#servicios" className="hover:text-cyan-500 transition-colors">Impresión Arquitectura</a></li>
-              <li><a href="#servicios" className="hover:text-cyan-500 transition-colors">Diseño de Interiores</a></li>
-              <li><a href="#servicios" className="hover:text-cyan-500 transition-colors">Producción Corporativa</a></li>
-              <li><a href="#servicios" className="hover:text-cyan-500 transition-colors">Proyectos Personalizados</a></li>
-            </ul>
-          </div>
+        
 
           {/* Company */}
           <div>
@@ -84,17 +75,7 @@ const Footer = () => {
         </div>
 
         {/* Bottom Bar */}
-        <div className="border-t border-slate-800 pt-8">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-            <p className="text-slate-400 text-sm">
-              © 2024 B&K 3D Impresiones. Todos los derechos reservados.
-            </p>
-            <div className="flex gap-6 text-sm">
-              <a href="#" className="text-slate-400 hover:text-cyan-500 transition-colors">Términos y Condiciones</a>
-              <a href="#" className="text-slate-400 hover:text-cyan-500 transition-colors">Política de Privacidad</a>
-            </div>
-          </div>
-        </div>
+        
       </div>
     </footer>
   );
