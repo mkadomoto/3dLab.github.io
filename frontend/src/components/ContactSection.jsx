@@ -96,8 +96,8 @@ const ContactSection = () => {
         phone: formData.phone || 'No proporcionado',
         service_type: formData.serviceType,
         message: formData.message,
-        file_name: fileName || 'Sin archivo adjunto',
-        file_url: fileUrl || 'Sin archivo adjunto',
+        file_name: fileName || '',
+        file_url: fileUrl || '',
       };
 
       await emailjs.send(
